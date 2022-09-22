@@ -1,4 +1,4 @@
-package arrayandstring
+package problems
 
 import "testing"
 

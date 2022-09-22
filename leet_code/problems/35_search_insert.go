@@ -1,4 +1,4 @@
-package arrayandstring
+package problems
 
 func SearchInsert(nums []int, target int) int {
 	var (
@@ -6,7 +6,7 @@ func SearchInsert(nums []int, target int) int {
 		right = len(nums)
 	)
 	for left < right {
-		middle := (left + right) / 2
+		middle := left + ((right - left) >> 1)
 		if nums[middle] > target {
 			right = middle
 		} else if nums[middle] < target {
