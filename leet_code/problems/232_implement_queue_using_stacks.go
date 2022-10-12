@@ -1,35 +1,54 @@
 package problems
 
+type Stack struct {
+	slice []int
+}
+
+func (this *Stack) Push(x int) {
+	this.slice = append(this.slice, x)
+}
+
+func (this *Stack) Pop() int {
+	val := this.slice[len(this.slice)-1]
+	this.slice = this.slice[:len(this.slice)-1]
+	return val
+}
+
+func (this *Stack) Top() int {
+	if this.Empty() {
+		return 0
+	}
+	return this.slice[len(this.slice)-1]
+}
+
+func (this *Stack) Empty() bool {
+	return len(this.slice) == 0
+}
+
 type MyQueue struct {
-	in  []int
-	out []int
+	in  Stack
+	out Stack
 }
 
 func MyQueueConstructor() MyQueue {
-	return MyQueue{
-		in:  []int{},
-		out: []int{},
-	}
+	return MyQueue{}
 }
 
 func (this *MyQueue) Push(x int) {
-	this.in = append(this.in, x)
+	this.in.Push(x)
 }
 
 func (this *MyQueue) Pop() int {
 	if this.Empty() {
 		return 0
 	}
-	if len(this.out) == 0 {
-		for len(this.in) > 0 {
-			this.out = append(this.out, this.in[len(this.in)-1])
-			this.in = this.in[:len(this.in)-1]
+	if this.out.Empty() {
+		for !this.in.Empty() {
+			this.out.Push(this.in.Pop())
 		}
 	}
 
-	val := this.out[len(this.out)-1]
-	this.out = this.out[:len(this.out)-1]
-	return val
+	return this.out.Pop()
 }
 
 func (this *MyQueue) Peek() int {
@@ -37,12 +56,12 @@ func (this *MyQueue) Peek() int {
 		return 0
 	}
 	val := this.Pop()
-	this.out = append(this.out, val)
+	this.out.Push(val)
 	return val
 }
 
 func (this *MyQueue) Empty() bool {
-	return len(this.in) == 0 && len(this.out) == 0
+	return this.in.Empty() && this.out.Empty()
 }
 
 /**
