@@ -4,7 +4,7 @@ type MyLinkedList struct {
 	head *ListNode
 }
 
-func Constructor() MyLinkedList {
+func MyLinkedListConstructor() MyLinkedList {
 	return MyLinkedList{}
 }
 
