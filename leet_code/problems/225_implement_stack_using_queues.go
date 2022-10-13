@@ -1,61 +1,32 @@
 package problems
 
-type Queue struct {
-	slice []int
-}
-
-func (this *Queue) Push(x int) {
-	this.slice = append(this.slice, x)
-}
-
-func (this *Queue) Peek() int {
-	if this.Empty() {
-		return 0
-	}
-	return this.slice[0]
-}
-
-func (this *Queue) Pop() int {
-	val := this.slice[0]
-	this.slice = this.slice[1:len(this.slice)]
-	return val
-}
-
-func (this *Queue) Empty() bool {
-	return len(this.slice) == 0
-}
-
-func (this *Queue) Size() int {
-	return len(this.slice)
-}
-
 type MyStack struct {
-	queue Queue
+	queue Queue[int]
 }
 
 func MyStackConstructor() MyStack {
 	return MyStack{}
 }
 
-func (this *MyStack) Push(x int) {
-	this.queue.Push(x)
+func (s *MyStack) Push(x int) {
+	s.queue.Push(x)
 }
 
-func (this *MyStack) Pop() int {
-	for i := 1; i <= this.queue.Size()-1; i++ {
-		this.queue.Push(this.queue.Pop())
+func (s *MyStack) Pop() int {
+	for i := 1; i <= s.queue.Size()-1; i++ {
+		s.queue.Push(s.queue.Pop())
 	}
-	return this.queue.Pop()
+	return s.queue.Pop()
 }
 
-func (this *MyStack) Top() int {
-	val := this.Pop()
-	this.Push(val)
+func (s *MyStack) Top() int {
+	val := s.Pop()
+	s.Push(val)
 	return val
 }
 
-func (this *MyStack) Empty() bool {
-	return this.queue.Empty()
+func (s *MyStack) Empty() bool {
+	return s.queue.Empty()
 }
 
 /**
