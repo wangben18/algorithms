@@ -6,6 +6,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+// for leetcode
 type TreeNodeQueue struct {
 	s []*TreeNode
 }
