@@ -32,6 +32,7 @@ func findMode(root *TreeNode) []int {
 			maxCount = count
 			result = []int{node.Val}
 		}
+		pre = node
 
 		traversal(node.Right)
 	}
