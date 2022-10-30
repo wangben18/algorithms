@@ -15,9 +15,11 @@ func solveSudoku(board [][]byte) {
 			}
 		}
 		// 检查同 3*3 宫
-		for r := 0; r < len(board); r++ {
-			for c := 0; c < len(board); c++ {
-				if r/3 == row/3 && c/3 == col/3 && board[r][c] == num {
+		rowStart := row / 3 * 3
+		colStart := col / 3 * 3
+		for r := rowStart; r < rowStart+3; r++ {
+			for c := colStart; c < colStart+3; c++ {
+				if board[r][c] == num {
 					return false
 				}
 			}
