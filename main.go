@@ -1,20 +1,34 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-func main() {
-	input := "The quick brown fox jumped over the lazy dog"
-	rev := Reverse(input)
-	doubleRev := Reverse(rev)
-	fmt.Printf("original: %q\n", input)
-	fmt.Printf("reversed: %q\n", rev)
-	fmt.Printf("reversed again: %q\n", doubleRev)
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for job := range jobs {
+		fmt.Printf("worker %d started job %d\n", id, job)
+		time.Sleep(time.Second)
+		fmt.Printf("worker %d finished job %d\n", id, job)
+		results <- job * 2
+	}
 }
 
-func Reverse(s string) string {
-	b := []byte(s)
-	for i, j := 0, len(b)-1; i < len(b)/2; i, j = i+1, j-1 {
-		b[i], b[j] = b[j], b[i]
+func main() {
+	jobCount := 7
+	jobs := make(chan int, jobCount)
+	results := make(chan int, jobCount)
+
+	for i := 1; i <= 3; i++ {
+		go worker(i, jobs, results)
 	}
-	return string(b)
+
+	for i := 1; i <= jobCount; i++ {
+		jobs <- i
+	}
+	close(jobs)
+
+	for i := 1; i <= jobCount; i++ {
+		<-results
+	}
 }
