@@ -5,30 +5,27 @@ import (
 	"time"
 )
 
-func worker(id int, jobs <-chan int, results chan<- int) {
-	for job := range jobs {
-		fmt.Printf("worker %d started job %d\n", id, job)
-		time.Sleep(time.Second)
-		fmt.Printf("worker %d finished job %d\n", id, job)
-		results <- job * 2
-	}
-}
-
 func main() {
-	jobCount := 7
-	jobs := make(chan int, jobCount)
-	results := make(chan int, jobCount)
-
-	for i := 1; i <= 3; i++ {
-		go worker(i, jobs, results)
+	requests := 5
+	burstRequests := make(chan int, requests)
+	for i := 1; i <= requests; i++ {
+		burstRequests <- i
 	}
+	close(burstRequests)
 
-	for i := 1; i <= jobCount; i++ {
-		jobs <- i
+	burst := 3
+	burstLimiter := make(chan time.Time, burst)
+	for i := 1; i <= burst; i++ {
+		burstLimiter <- time.Now()
 	}
-	close(jobs)
+	go func() {
+		for t := range time.Tick(200 * time.Millisecond) {
+			burstLimiter <- t
+		}
+	}()
 
-	for i := 1; i <= jobCount; i++ {
-		<-results
+	for request := range burstRequests {
+		<-burstLimiter
+		fmt.Println("request", request, time.Now())
 	}
 }
