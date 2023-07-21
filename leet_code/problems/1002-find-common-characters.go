@@ -21,7 +21,7 @@ func commonChars(words []string) []string {
 	for i, v := range result {
 		if v > 0 {
 			for j := 0; j < v; j++ {
-				ans = append(ans, string('a'+i))
+				ans = append(ans, string(append([]byte{}, byte('a'+i))))
 			}
 		}
 	}
