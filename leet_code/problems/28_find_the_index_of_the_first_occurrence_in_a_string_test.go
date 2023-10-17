@@ -17,9 +17,9 @@ func Test_getNext(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				s: "aabaaf",
+				s: "benbenw",
 			},
-			want: []int{0, 1, 0, 1, 2, 0},
+			want: []int{0, 0, 0, 1, 2, 3, 0},
 		},
 	}
 	for _, tt := range tests {
@@ -44,8 +44,8 @@ func Test_strStr(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				haystack: "aabaabaaf",
-				needle:   "aabaaf",
+				haystack: "benbenbenw",
+				needle:   "benbenw",
 			},
 			want: 3,
 		},

@@ -17,38 +17,33 @@ func Constructor(capacity int) LRUCache {
 	}
 }
 
-func (this *LRUCache) Get(key int) int {
-	// get from map
-	node, ok := this.LinkedNodeMap[key]
-	// if not exist, return -1
+func (cache *LRUCache) Get(key int) int {
+	node, ok := cache.LinkedNodeMap[key]
 	if !ok {
 		return -1
 	}
-	// if exist, move to top
-	this.LinkedList.MoveToTop(node)
+	cache.LinkedList.MoveToTop(node)
 	return node.Value.(CacheNode).Value
 }
 
-func (this *LRUCache) Put(key int, value int) {
+func (cache *LRUCache) Put(key int, value int) {
 	newCacheNode := CacheNode{key, value}
-	// get from map
-	node, ok := this.LinkedNodeMap[key]
-	// if exist, update value, move to top
+	node, ok := cache.LinkedNodeMap[key]
+
 	if ok {
 		node.Value = newCacheNode
-		this.LinkedList.MoveToTop(node)
+		cache.LinkedList.MoveToTop(node)
 		return
 	}
-	// if not exist,
-	// if len(map) == capacity, delete last node
-	if len(this.LinkedNodeMap) == this.capacity {
-		delete(this.LinkedNodeMap, this.LinkedList.Tail.Pre.Value.(CacheNode).Key)
-		this.LinkedList.Remove(this.LinkedList.Tail.Pre)
+
+	if len(cache.LinkedNodeMap) == cache.capacity {
+		delete(cache.LinkedNodeMap, cache.LinkedList.Tail.Pre.Value.(CacheNode).Key)
+		cache.LinkedList.Remove(cache.LinkedList.Tail.Pre)
 	}
-	// add new node
+
 	newLinkedNode := &DoubleLinkedNode{Value: newCacheNode}
-	this.LinkedNodeMap[key] = newLinkedNode
-	this.LinkedList.AddToTop(newLinkedNode)
+	cache.LinkedNodeMap[key] = newLinkedNode
+	cache.LinkedList.AddToTop(newLinkedNode)
 }
 
 type DoubleLinkedList struct {
